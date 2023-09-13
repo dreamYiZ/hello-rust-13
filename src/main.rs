@@ -3,6 +3,24 @@
 use std::cmp::Ordering;
 use std::io;
 
+struct User {
+    active: bool,
+    username: String,
+    email: String,
+    sign_in_count: u64,
+}
+
+struct Color(u32, u32, u32);
+struct Point(u32, u32, u32);
+
+struct AlwaysEqual;
+
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
 fn main() {
     println!("Hello, world!");
     let mut a = 0;
@@ -32,6 +50,8 @@ fn main() {
 
     let mut guess = String::new();
     guess = String::from("66");
+
+    println!("{guess}");
 
     // io::stdin()
     //     .read_line(&mut guess)
@@ -226,16 +246,73 @@ fn main() {
 
     let s1 = String::from("hello");
 
-    let (s2,len) = calculate_length(s1);
+    let (s2, len) = calculate_length(s1);
 
     println!("the length of {} is {}", s2, len);
-
 
     let s1 = String::from("Hello");
 
     let len = calculate_length_2(&s1);
     println!("len of {} is {}", s1, len);
 
+    let mut s1 = String::from("hello");
+
+    change(&mut s1);
+
+    println!("s1 is {s1}");
+
+    let mut s1 = String::from("hello");
+    let r1 = &s1;
+    let r2 = &s1;
+
+    println!("r1 {r1}, r2 {r2}");
+    let r3 = &mut s1;
+
+    println!("r3 {r3}");
+
+    let s = String::from("hello world!");
+    let word = first_word(&s);
+
+    println!("word: {word}");
+
+    let a = [1, 2, 3, 4, 5];
+    let slice = &a[1..3];
+
+    assert_eq!(slice, &[2, 3]);
+
+    let user1 = User {
+        active: true,
+        username: String::from("user1"),
+        email: String::from("user@gmail.com"),
+        sign_in_count: 1u64,
+    };
+
+    let user2 = build_user(String::from("user2@gmail.com"), String::from("user2"));
+    let user3 = build_user(String::from("user3@gmail.com"), String::from("user3"));
+    let user4 = User {
+        email: String::from("user4@gmail.com"),
+        ..user3
+    };
+
+    let black = Color(0, 0, 0);
+    let origin = Color(0, 0, 0);
+
+    let subject = AlwaysEqual;
+
+    let width1 = 30;
+    let height1 = 50;
+    println!(
+        "the area of rectangle is {} square pixels",
+        area(width1, height1)
+    );
+
+    let rect1 = Rectangle{
+        width: 100,
+        height: 200,
+    };
+    let area_rect1 = area3(&rect1);
+
+    println!("rect1 is {:?}", &rect1);
 }
 
 fn add_1(x: &mut i32) {
@@ -284,6 +361,47 @@ fn calculate_length(s: String) -> (String, usize) {
     (s, length)
 }
 
-fn calculate_length_2 (s: &String)->usize{
+fn calculate_length_2(s: &String) -> usize {
     s.len()
+}
+
+fn change(s: &mut String) {
+    s.push_str(", world.");
+}
+
+fn dangle() -> String {
+    let s = String::from("hello");
+    s
+}
+
+fn first_word(s: &String) -> &str {
+    let bytes = s.as_bytes();
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
+        }
+    }
+
+    return &s[..];
+}
+
+fn build_user(email: String, username: String) -> User {
+    User {
+        active: true,
+        username,
+        email,
+        sign_in_count: 1,
+    }
+}
+
+fn area(width: u32, height: u32) -> u32 {
+    width * height
+}
+
+fn area2(dimensions: (u32, u32)) -> u32 {
+    dimensions.0 * dimensions.1
+}
+
+fn area3(rect: &Rectangle) -> u32 {
+    rect.width * rect.height
 }
