@@ -3,6 +3,17 @@
 use std::cmp::Ordering;
 use std::io;
 
+
+enum IpAddrKind {
+    V4,
+    V6,
+}
+
+struct IpAddr{
+    kind: IpAddrKind,
+    address: String,
+}
+
 struct User {
     active: bool,
     username: String,
@@ -313,6 +324,20 @@ fn main() {
     let area_rect1 = area3(&rect1);
 
     println!("rect1 is {:?}", &rect1);
+
+    let four = IpAddrKind::V4;
+    let six = IpAddrKind::V6;
+
+    let home = IpAddr{
+        kind: IpAddrKind::V4,
+        address: String::from("127.0.0.1"),
+    };
+
+    let loopback = IpAddr{
+        kind: IpAddrKind::V6,
+        address: String::from("::1"),
+    };
+
 }
 
 fn add_1(x: &mut i32) {
@@ -404,4 +429,9 @@ fn area2(dimensions: (u32, u32)) -> u32 {
 
 fn area3(rect: &Rectangle) -> u32 {
     rect.width * rect.height
+}
+
+
+fn route (ip_kind :IpAddrKind){
+
 }
