@@ -3,13 +3,39 @@
 use std::cmp::Ordering;
 use std::io;
 
-
 enum IpAddrKind {
     V4,
     V6,
 }
 
-struct IpAddr{
+enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+
+enum Coin {
+    Penny,
+    Nickel,
+    Dime,
+    Quarter,
+}
+
+impl Message {
+    fn call(&self) {
+        match self {
+            Message::Quit => {}
+            Message::Move { x, y } => {}
+            Message::Write(s) => {
+                println!("write: {s}");
+            }
+            Message::ChangeColor(x, y, z) => {}
+        }
+    }
+}
+
+struct IpAddr {
     kind: IpAddrKind,
     address: String,
 }
@@ -317,7 +343,7 @@ fn main() {
         area(width1, height1)
     );
 
-    let rect1 = Rectangle{
+    let rect1 = Rectangle {
         width: 100,
         height: 200,
     };
@@ -328,15 +354,86 @@ fn main() {
     let four = IpAddrKind::V4;
     let six = IpAddrKind::V6;
 
-    let home = IpAddr{
+    let home = IpAddr {
         kind: IpAddrKind::V4,
         address: String::from("127.0.0.1"),
     };
 
-    let loopback = IpAddr{
+    let loopback = IpAddr {
         kind: IpAddrKind::V6,
         address: String::from("::1"),
     };
+
+    let m = Message::Write(String::from("hello"));
+    m.call();
+
+    let some_number = Some(5);
+    let some_char = Some('e');
+    let absent_number: Option<i32> = None;
+
+    let x = 5;
+    let y = Some(5);
+    let sum = x + y.unwrap();
+    println!("sum: {sum}");
+
+    let c = Coin::Penny;
+
+    let v_of_c = value_in_cents(c);
+    println!("v of c is: {v_of_c}");
+
+    let c2 = Coin::Penny;
+    value_in_cents_2(c2);
+
+    let five = Some(5);
+    let six = plus_one_2(five);
+    let none = plus_one_2(None);
+
+    let a = 9;
+
+    match a {
+        5 => {}
+        7 => {}
+        other => {
+            println!("a is {a}");
+        }
+    }
+
+    let mut arr = vec![1, 2, 3, 4];
+
+    for i in 0..4 {
+        println!("{}", arr[i]);
+        arr.push(i);
+    }
+
+    // for i in 0..4{
+    //     println!("{}",arr[i]);
+    //     // arr.push(i);
+    // }
+
+    println!("{:?}, len: {}", arr, arr.len());
+
+    let a = 6;
+    let mut b: u32 = 100;
+    let c = compute(&a, &mut b);
+
+    println!("c is: {:?}", c);
+    println!("b is: {:?}", b);
+    println!("b is: {}", b);
+
+
+    let config_max = Some(3u8);
+    match config_max{
+        Some(max)=>{
+            println!("the maximum is configured to be {}", max);
+        },
+        _=>(),
+    }
+
+    let mut count = 0;
+    // match  coin {
+        
+    // }
+
 
 }
 
@@ -431,7 +528,68 @@ fn area3(rect: &Rectangle) -> u32 {
     rect.width * rect.height
 }
 
+fn route(ip_kind: IpAddrKind) {}
 
-fn route (ip_kind :IpAddrKind){
+fn value_in_cents(coin: Coin) -> u8 {
+    match coin {
+        Coin::Penny => 1,
+        Coin::Nickel => 5,
+        Coin::Dime => 15,
+        Coin::Quarter => 25,
+    }
+}
 
+fn value_in_cents_2(coin: Coin) -> u8 {
+    match coin {
+        Coin::Penny => {
+            println!("value in cents 2");
+            1
+        }
+        Coin::Nickel => 5,
+        Coin::Dime => 15,
+        Coin::Quarter => 25,
+    }
+}
+
+fn plus_one_2(x: Option<i32>) -> Option<i32> {
+    match x {
+        None => None,
+        Some(i) => Some(i + 1),
+    }
+}
+
+fn as_str(n: &u32) -> String {
+    let s = format!("{}", n);
+    s
+}
+
+fn compute(input: &u32, output: &mut u32) {
+    if *input > 10 {
+        *output = 1;
+    }
+    if *input > 5 {
+        *output *= 2;
+    }
+}
+
+fn compute_2(input: &u32, output: &mut u32) {
+    let cached_input = *input;
+    if cached_input > 10 {
+        *output = 2;
+    } else if cached_input > 5 {
+        *output *= 2;
+    }
+}
+
+fn compute_3(input: &u32, output: &mut u32) {
+    let mut temp = *output;
+    if *input > 10 {
+        temp = 1;
+    }
+
+    if *input > 5 {
+        temp *= 2;
+    }
+
+    *output = temp;
 }
